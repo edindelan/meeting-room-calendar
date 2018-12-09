@@ -1,6 +1,13 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import room1 from '../src/assets/img/meeting-room-1.jpg';
-// import './App.scss';
+import room2 from '../src/assets/img/meeting-room-2.jpg';
+import room3 from '../src/assets/img/meeting-room-3.jpg';
+import room4 from '../src/assets/img/meeting-room-4.jpg';
+import room5 from '../src/assets/img/meeting-room-5.jpg';
+import room6 from '../src/assets/img/meeting-room-6.jpg';
+import logo from '../src/assets/svg/mindspace_logo.svg';
+import './App2.scss';
 
 const timeSlots = [
   {
@@ -104,7 +111,7 @@ const rooms = [
     ]
   },
   {
-    image: room1,
+    image: room2,
     bookedSlots: [
       {
         from: 1,
@@ -117,7 +124,7 @@ const rooms = [
     ]
   },
   {
-    image: room1,
+    image: room3,
     bookedSlots: [
       {
         from: 9,
@@ -126,7 +133,7 @@ const rooms = [
     ]
   },
   {
-    image: room1,
+    image: room4,
     bookedSlots: [
       {
         from: 3,
@@ -143,7 +150,7 @@ const rooms = [
     ]
   },
   {
-    image: room1,
+    image: room5,
     bookedSlots: [
       {
         from: 1,
@@ -156,7 +163,7 @@ const rooms = [
     ]
   },
   {
-    image: room1,
+    image: room6,
     bookedSlots: [
       {
         from: 9,
@@ -166,63 +173,84 @@ const rooms = [
   }
 ];
 
-class App extends Component {
+const days = [...Array(31)].map((item, index) => {
+  return {
+    dayNumber: index + 1,
+    dayName: 'Mo'
+  };
+});
 
+console.log('days', days)
+
+class App extends Component {
   constructor(props) {
     super(props);
 
-    this.calendar = React.createRef();
-  }
+    this.roomCalendar = React.createRef();
+    this.roomCalendarImages = React.createRef();
 
-  state = {
-    scrollPosition: null
+    this.state = {
+      timeUnitScrollPosition: 0
+    }
   }
 
   componentDidMount() {
-    console.log('dada', this.calendar )
-    this.calendar.current.addEventListener('scroll', this.handleScroll);
-    this.setState({
-      scrollPosition: this.calendar.current.scrollLeft - this.calendar.current.offsetLeft - this.calendar.current.clientLeft
-    })
+    this.roomCalendar.current.addEventListener('scroll', this.handleScroll);
+    // this.roomCalendarImages.current.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    this.roomCalendar.current.removeEventListener('scroll', this.handleScroll);
+    // this.roomCalendarImages.current.removeEventListener('scroll', this.handleScroll);
   }
 
   handleScroll = (e) => {
-    console.log('dasd', e.target)
+    const node = e.target;
     this.setState({
-      scrollPosition: e.target.scrollLeft - e.target.offsetLeft - e.target.clientLeft
+      timeUnitScrollPosition: this.roomCalendar.current.scrollTop
     })
+    this.roomCalendarImages.current.scrollLeft = node.scrollLeft;
   }
 
   render() {
-    const {scrollPosition} = this.state;
+    const {timeUnitScrollPosition} = this.state;
     const slotHeight = 100 / timeSlots.length;
     return (
       <div className="calendar-main-container">
         <div className="header">
-          <div className="title"/>
-          <div className="calendar-strip"/>
+          <div className="title">
+            <img src={logo} alt='logo'/>
+          </div>
+          <div className="calendar-strip">
+            <div className="days">
+              {days.map(day => (
+                <div className="day-wrapper">
+                  <span>{day.dayName}</span>
+                  <span className="day-number">{day.dayNumber}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="rooms">
-          <div className="time-units">
-            {
-              timeSlots.map((slot, index) => (
-                <div key={index} className="unit">{slot.slotNumber}</div>
-              ))
-            }
-          </div>
-          <div className="wrapper-parent">
-            <div className="wrapper" ref={this.calendar}>
-              <div className="room-images">
-                <div className="room-wrapper" style={{left: -scrollPosition}}>
-                  {rooms.map((room, slotContainerIndex) => (
-                    <div className="room-image">
-                      <img src={room.image}/>
-                    </div>
-                  ))}
-                </div>
+
+          <div className="calendar">
+            <div className="rooms-images">
+              <div className="rooms-images-inner" ref={this.roomCalendarImages}>
+                {rooms.map((room, slotContainerIndex) => (
+                  <div key={slotContainerIndex} className="room-image" style={{backgroundImage: `url(${room.image})`}} />
+                ))}
               </div>
-              <div className="slot-containers">
+            </div>
+            <div className="time-slots">
+              <div className="time-units" style={{top: -timeUnitScrollPosition}}>
+                {
+                  timeSlots.map((slot, index) => (
+                    <div key={index} className="unit">{slot.slotNumber}</div>
+                  ))
+                }
+              </div>
+              <div className="time-slots-inner" ref={this.roomCalendar}>
                 {rooms.map((room, slotContainerIndex) => (
                   <div key={slotContainerIndex} className="slot-container">
                     {timeSlots.map((slot, slotIndex) => (
@@ -253,7 +281,7 @@ class App extends Component {
             </div>
           </div>
 
-        </div>
+
       </div>
     )
   }

@@ -1,0 +1,202 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.calendar-main-container {
+  height: 100vh;
+
+  .header {
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+
+    .title {
+      height: 50px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 200px;
+      }
+    }
+
+    .calendar-strip {
+      height: 50px;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      background-color: rgba(238, 238, 238, 0.35);
+
+      .days {
+        overflow: scroll;
+        white-space: nowrap;
+        height: 100%;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .day-wrapper {
+          width: 50px;
+          height: 100%;
+          display: inline-block;
+          text-align: center;
+          font-size: 12px;
+          padding-top: 10px;
+          color: #333;
+
+          &:nth-child(9) {
+            .day-number {
+              display: inline-block;
+              background: #333;
+              color: #fff;
+              border-radius: 50%;
+              width: 16px;
+              height: 16px;
+              height: 16px;
+              text-align: center;
+            }
+          }
+
+          span {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+.calendar {
+  position: fixed;
+  top: 110px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  &:before {
+    content: '';
+    display: block;
+    width: 1px;
+    bottom: 0;
+    top: 5px;
+    height: 100%;
+    position: absolute;
+    left: 60px;
+    box-shadow: -1px 0px 1px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .rooms-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+
+    .rooms-images-inner {
+      //overflow-x: scroll;
+      //overflow-y: hidden;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-left: 60px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .room-image {
+        height: 145px;
+        width: 300px;
+        display: inline-block;
+        margin-right: 10px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+        margin-top: 5px;
+      }
+    }
+  }
+
+  .time-slots {
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    bottom:0;
+    overflow: hidden;
+
+    .time-units {
+      position: absolute;
+      left: 10px;
+      width: 35px;
+
+      .unit {
+        height: 50px;
+        color: #333;
+        text-align: right;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        font-size: 14px;
+      }
+    }
+    .time-slots-inner {
+      height: 100%;
+      overflow: scroll;
+      white-space: nowrap;
+      margin-left: 60px;
+      position: relative;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .slot-container {
+        width: 300px;
+        position: relative;
+        display: inline-block;
+        margin-right: 10px;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+
+        .slot {
+          height: 50px;
+          border-top: 1px solid #e0e0e0;
+          display: flex;
+          align-items: center;
+          padding-left: 10px;
+          color: #bbb;
+
+          &:first-child {
+            border: none;
+          }
+        }
+
+        .container {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+
+          .slot-content-container {
+            background-color: rgba(236, 236, 236, 0.71);            position: absolute;
+            width: calc(100% - 20px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.3);
+
+            .slot-content {
+              background-color: #fff;
+              border-radius: 4px;
+              padding: 7px 10px;
+              box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.45);
+              color: #999;
+            }
+          }
+        }
+      }
+    }
+  }
+}
